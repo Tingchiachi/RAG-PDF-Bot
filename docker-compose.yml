@@ -1,0 +1,53 @@
+services:
+  qdrant:
+    image: qdrant/qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__LOG_LEVEL=warn
+
+  loader:
+    build: .
+    command: python loader.py
+    env_file:
+      - .env
+    depends_on:
+      - qdrant
+    volumes:
+      - .:/app
+
+  pdfchatbot:
+    build: .
+    command: python app.py
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      loader:
+        condition: service_completed_successfully
+      qdrant:
+        condition: service_started
+    volumes:
+      - .:/app
+  
+  ngrok:
+    image: ngrok/ngrok:latest
+    command: http pdfchatbot:5000
+    ports:
+      - "4040:4040"
+    env_file:
+      - .env
+
+  ngrok-watcher:
+    build: .
+    command: python show_ngrok.py
+    depends_on:
+      - ngrok
+    volumes:
+      - .:/app
+
+volumes:
+  qdrant_data:
