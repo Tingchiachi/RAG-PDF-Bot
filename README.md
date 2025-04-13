@@ -47,13 +47,13 @@ NGROK_AUTHTOKEN=...
 
 1. PDF documents should be placed in the `pdf document/` directory. They will be automatically vectorized on Qdrant.
    
-2. Run the service with Docker Compose:
-(all Python packages are pre-installed in Docker)
+2. Run the service with Docker Compose (all Python packages are pre-installed in Docker) :
+
 ```sh
 docker compose up --build
 ```
 
-3. You will see a public ngrok URL printed in the terminal:
+3. You will see a public ngrok URL printed in the terminal :
 ```sh
 Ngrok Public URL (for LINE Webhook): https://abcd1234.ngrok-free.app/callback
 ```
@@ -63,7 +63,7 @@ Ngrok Public URL (for LINE Webhook): https://abcd1234.ngrok-free.app/callback
 <!-- Usage -->
 ## Usage
 
-Send a message to linebot, for example:
+Send a message to linebot, for example :
 ![image](example.jpg)
 
 <!-- License -->
@@ -85,9 +85,9 @@ This project is licensed under the MIT License.
 <!-- Contact -->
 ## Contact
 
-E-Mail: [ting60101@gmail.com](mailto:ting60101@gmail.com)
+E-Mail : [ting60101@gmail.com](mailto:ting60101@gmail.com)
 
-GitHub: [https://github.com/Tingchiachi](https://github.com/Tingchiachi)
+GitHub : [https://github.com/Tingchiachi](https://github.com/Tingchiachi)
 
-Linkedin: [https://www.linkedin.com/in/chia-chi-ting-2a4212280/](https://www.linkedin.com/in/chia-chi-ting-2a4212280/)
+Linkedin : [https://www.linkedin.com/in/chia-chi-ting-2a4212280/](https://www.linkedin.com/in/chia-chi-ting-2a4212280/)
 
