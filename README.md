@@ -1,19 +1,23 @@
 <!-- About the Project -->
-## About the Project
+## Project
 
-This project integrates the following technologies to build a **Retrieval-Augmented Generation (RAG)** chatbot:
+This project use the following technologies to build a **Retrieval-Augmented Generation (RAG)** chatbot :
 
-- **LangChain**: Handles retrieval, prompts, and QA chain
+- **LangChain** : Handles retrieval, prompts, and QA chain
 
-- **Qdrant**: A vector database used to store and search document embeddings
+- **Qdrant** : A vector database used to store and search document embeddings
 
-- **Azure OpenAI**: Generates responses based on semantic context
+- **Azure OpenAI** : Generates responses based on semantic context
 
-- **LINE Bot**: Enables user interaction by messaging
+- **LINE Bot** : Enables user interaction by messaging
 
-- **Docker**: Simplifies deployment
+- **ngrok** : webhook exposure (note : ngrok is convenient for development but not recommended for production use)
 
-- **ngrok**: webhook exposure
+- **Docker** : Manages the following components as services to ensure reproducible and simple deployment
+  - Qdrant vector DB
+  - PDF loader
+  - ngrok tunnel
+  - LINE chatbot
 
 <!-- Installation -->
 ## Installation
@@ -21,7 +25,7 @@ This project integrates the following technologies to build a **Retrieval-Augmen
 Copy the repository
 ```sh
 git clone https://github.com/Tingchiachi/RAG-PDF-Bot.git
-cd your-repo
+cd RAG-PDF-Bot
 ```
 Create a `.env` file:
 ```sh
@@ -41,23 +45,26 @@ NGROK_AUTHTOKEN=...
 <!-- Start -->
 ## Start
 
-Run the service with Docker Compose:
-(all Python packages are pre-installed by Docker)
+1. PDF documents should be placed in the `pdf document/` directory. They will be automatically vectorized on Qdrant.
+   
+2. Run the service with Docker Compose:
+(all Python packages are pre-installed in Docker)
 ```sh
 docker compose up --build
 ```
-You will see a public ngrok URL printed in the terminal:
+
+3. You will see a public ngrok URL printed in the terminal:
 ```sh
-https://abcd1234.ngrok-free.app/callback
+Ngrok Public URL (for LINE Webhook): https://abcd1234.ngrok-free.app/callback
 ```
-Paste this into your LINE Developer Console as the Webhook URL.
-PDF documents should be placed in the `pdf document/` directory. 
-They will be automatically vectorized on startup.
+
+4. Paste this URL into your LINE Developer Console as the Webhook URL.
 
 <!-- Usage -->
 ## Usage
 
 Send a message to linebot, for example:
+![image](example.jpg)
 
 <!-- License -->
 ## License
@@ -79,5 +86,8 @@ This project is licensed under the MIT License.
 ## Contact
 
 E-Mail: [ting60101@gmail.com](mailto:ting60101@gmail.com)
+
 GitHub: [https://github.com/Tingchiachi](https://github.com/Tingchiachi)
+
+Linkedin: [https://www.linkedin.com/in/chia-chi-ting-2a4212280/](https://www.linkedin.com/in/chia-chi-ting-2a4212280/)
 

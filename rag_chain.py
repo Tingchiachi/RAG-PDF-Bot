@@ -40,7 +40,7 @@ def wait_for_qdrant(host="qdrant", port=6333, retries=20, delay=2):
 
 wait_for_qdrant(host=qdrant_host, port=qdrant_port)
 
-# 初始化 Qdrant 客戶端（這邊要 match 上面的 host）
+# 初始化 Qdrant 客戶端
 qdrant_client = QdrantClient(url=qdrant_url)
 
 # 初始化向量庫
@@ -53,7 +53,7 @@ vector_store = QdrantVectorStore(
 # 初始化檢索器
 retriever = vector_store.as_retriever(search_type="similarity", search_kwargs={"k": 2})
 
-# 初始化 Azure OpenAI 聊天模型 (GPT-3.5 Turbo)
+# 初始化 Azure OpenAI 聊天模型 (GPT4o)
 azure_chat_model = AzureChatOpenAI(
     azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
     azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
@@ -68,7 +68,7 @@ q_template = ChatPromptTemplate.from_template("""請根據以下參考資料回�
 問題：{question}
 """)
 
-# 建立檢索問答鏈 (RetrievalQA)
+# 建立檢索QA
 qa_chain = (
     {
         "context": retriever ,
