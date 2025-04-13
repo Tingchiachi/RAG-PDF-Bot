@@ -19,6 +19,13 @@ This project use the following technologies to build a **Retrieval-Augmented Gen
   - ngrok tunnel
   - LINE chatbot
 
+<!-- System Architecture -->
+## System Architecture
+
+Below is the system architecture illustrating how the LINE Bot interacts with LangChain and Qdrant to implement the RAG pipeline :
+
+![System Diagram](./PDFchatbot.png)
+
 <!-- Installation -->
 ## Installation
 
