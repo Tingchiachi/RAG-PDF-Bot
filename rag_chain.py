@@ -24,10 +24,10 @@ embedding_model = AzureOpenAIEmbeddings(
 )
 
 qdrant_url = os.getenv("QDRANT_URL", "http://qdrant:6333")
-qdrant_host = "qdrant"
-qdrant_port = 6333
+qdrant_host = "QDRANT"
+qdrant_port = os.getenv("QDRANT_PORT")
 
-def wait_for_qdrant(host="qdrant", port=6333, retries=20, delay=2):
+def wait_for_qdrant(host="qdrant", port=qdrant_port, retries=20, delay=2):
     for attempt in range(retries):
         try:
             with socket.create_connection((host, port), timeout=2):

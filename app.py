@@ -49,4 +49,5 @@ def handle_message(event):
     messaging_api.reply_message(reply)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host=os.getenv("LOCAL_HOST"), 
+            port=os.getenv("LOCAL_PORT"))
