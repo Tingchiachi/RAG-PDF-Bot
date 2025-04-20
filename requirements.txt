@@ -9,3 +9,5 @@ langchain-community
 openai
 tiktoken
 pypdf
+sqlite-utils
+sqlalchemy

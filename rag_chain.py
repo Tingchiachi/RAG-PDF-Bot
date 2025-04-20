@@ -2,16 +2,16 @@
 import time
 import socket
 from qdrant_client import QdrantClient
-from qdrant_client.http.exceptions import ResponseHandlingException
 import os
 from dotenv import load_dotenv
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.chat_message_histories import SQLChatMessageHistory
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_openai import AzureChatOpenAI,AzureOpenAIEmbeddings
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_qdrant import QdrantVectorStore
+from sqlalchemy import create_engine
 
 load_dotenv(".env")
 
@@ -63,22 +63,43 @@ azure_chat_model = AzureChatOpenAI(
 )
 
 # 建立提示樣板
-q_template = ChatPromptTemplate.from_template("""請根據以下參考資料回答問題：
-參考資料：{context}
-問題：{question}
+q_template = ChatPromptTemplate.from_template("""
+你是一個 PDF 文件問答小幫手，請根據下方提供的內容回答使用者的問題。
+請使用繁體中文、簡潔扼要地回答。
+
+【文件內容】
+{context}
+
+【使用者問題】
+{input}
 """)
 
+document_chain = create_stuff_documents_chain(azure_chat_model, q_template)
+retrieval_chain = create_retrieval_chain(retriever, document_chain)
+engine = create_engine("sqlite:///./chat_history.db")
+
+def get_session_history(session_id: str):
+    return SQLChatMessageHistory(session_id=session_id, connection=engine)
+
 # 建立檢索QA
-qa_chain = (
-    {
-        "context": retriever ,
-        "question": RunnablePassthrough(),
-    }
-    | q_template
-    | azure_chat_model
-    | StrOutputParser()
+qa_chain = RunnableWithMessageHistory(
+    retrieval_chain,
+    get_session_history,
+    input_messages_key="input",
+    output_messages_key="answer",
+    history_messages_key="history"
 )
 
-def answer_query(query: str) -> str:
-    result = qa_chain.invoke(query)
-    return result
+
+def answer_query(query: str, session_id: str) -> str:
+    sources = set()
+    docs = retriever.invoke(query)
+    for doc in docs:
+        filename = doc.metadata.get("source", "unknown").lstrip("pdf document/")
+        page = doc.metadata.get("page_label", "?")
+        sources.add(f"{filename} 第 {page} 頁")
+    response = qa_chain.invoke({"input": query}, config={"configurable": {"session_id": session_id}})
+    response_answer = response["answer"]
+    response_with_source = f"{response_answer}\n\n參考來源：{', '.join(sources)}"
+    return response_with_source
+   

@@ -3,7 +3,7 @@
 
 This project use the following technologies to build a **Retrieval-Augmented Generation (RAG)** chatbot :
 
-- **LangChain** : Handles retrieval, prompts, and QA chain
+- **LangChain** : Handles retrieval, prompt generation, memory, and session-based question-answering
 
 - **Qdrant** : A vector database used to store and search document embeddings
 
@@ -18,6 +18,8 @@ This project use the following technologies to build a **Retrieval-Augmented Gen
   - PDF loader
   - ngrok tunnel
   - LINE chatbot
+  
+- **SQLite (LangChain)** : Stores multi-turn conversation history per user session for enhanced contextual responses
 
 <!-- System Architecture -->
 ## System Architecture
@@ -66,6 +68,15 @@ Ngrok Public URL (for LINE Webhook): https://abcd1234.ngrok-free.app/callback
 ```
 
 4. Paste this URL into your LINE Developer Console as the Webhook URL.
+
+<!-- Features -->
+## Features
+
+- Multi-turn conversation (session aware)
+- SQL-based chat history logging
+- `/history` to show recent messages
+- `/clear` to delete user history
+- Automatic PDF ingestion and embedding
 
 <!-- Usage -->
 ## Usage
